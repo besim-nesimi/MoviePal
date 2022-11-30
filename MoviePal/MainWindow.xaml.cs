@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.EntityFrameworkCore;
 using MoviePal.Data;
 using MoviePal.Models;
 
@@ -151,8 +152,36 @@ namespace MoviePal
                 ListViewItem selectedListViewItem = lvActors.SelectedItem as ListViewItem; // Vilken actor är det?
                 Actor selectedActor = (Actor)selectedListViewItem.Tag; // selectedListViewItem.Tag är t.ex. detta item.Content = $"{director.FirstName} {director.LastName}";
 
-                Actor dbActor = context.Actors.FirstOrDefault(a => a.ActorId == selectedActor.ActorId); // Actor i listview, i kodform, knyts samman med actor i Db genom ActorId. Går också skriva .Include(a => a.Movies) när vi populatear listan för att slippa denna linjen kod ?
+                Actor dbActor = context.Actors.Include(a => a.Movies).FirstOrDefault(a => a.ActorId == selectedActor.ActorId); // Actor i listview, i kodform, knyts samman med actor i Db genom ActorId. Går också skriva .Include(a => a.Movies) när vi populatear listan för att slippa denna linjen kod ?
+
+                ComboBoxItem selectedComboBoxItem = cbMovies.SelectedItem as ComboBoxItem;
+                Movie selectedMovie = selectedComboBoxItem.Tag as Movie;
+
+                Movie? dbMovie = context.Movies.FirstOrDefault(m => m.MovieId == selectedMovie.MovieId);
+
+                dbActor.Movies.Add(dbMovie);
+                context.Actors.Update(dbActor);
+                context.SaveChanges();
+
             }
+
+
+        }
+
+        private void btnShowActorMovies_Click(object sender, RoutedEventArgs e)
+        {
+
+            using (AppDbContext context = new())
+            {
+                ListViewItem selectedListViewItem = lvActors.SelectedItem as ListViewItem;
+                Actor selectedActor = (Actor)selectedListViewItem.Tag;
+
+                ActorMovieWindow actorMovieWindow = new(selectedActor.ActorId);
+
+                actorMovieWindow.Show();
+                // Actor? dbActor = context.Actors.Include(a => a.Movies).FirstOrDefault(a => a.ActorId == selectedActor.ActorId);
+            }
+            
         }
     }
 }

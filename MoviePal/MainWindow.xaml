@@ -57,5 +57,6 @@
         <Label Content="Movies" Grid.Column="3" Grid.Row="9"/>
         <ComboBox x:Name="cbMovies" Grid.Column="4" Grid.Row="9"/>
         <Button x:Name="btnAddActorMovie" Content="Add Actor To Movie" Grid.Column="3" Grid.Row="10" Click="btnAddActorMovie_Click"/>
+        <Button x:Name="btnShowActorMovies" Content="Show Actor Movies" Grid.Column="4" Grid.Row="6" Click="btnShowActorMovies_Click"/>
     </Grid>
 </Window>
