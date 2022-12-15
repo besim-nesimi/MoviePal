@@ -138,7 +138,6 @@ namespace MoviePal
 
                 context.Movies.Add(newMovie);
                 context.SaveChanges();
-
             }
 
             txtActorFirstName.Clear();
